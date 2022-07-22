@@ -74,84 +74,7 @@ void generator(){
             s[i][j]=sudoku[i][j];
         }
     }
-}
-void luzer(){
-    char da;
-    nastavi:
-        printf("\nDo You want to see the solution? [Y/N]");
-        scanf(" %c", &da);
-        if(da=='y' || da=='Y') {
-                for(int i=0; i<9; i++)
-                    for(int j=0; j<9; j++)
-                        sudoku[i][j]=s[i][j];
-                crtaj();
-                main();
-            }
-        else if(da=='n' || da=='N') main();
-        else goto nastavi;
-    
-}
-void igra(){
-    int x, y, z, i, j, greska=0, pobeda=0;
-    char d, da;
-    while(1){
-    start: printf("\nEnter the positions of a number <<x i y>>: "); scanf("%d %d", &x, &y);
-    if(sudoku[y-1][x-1]==0) {
-         printf("\nEnter the number: "); scanf("%d", &z);
-            sudoku[y-1][x-1]=z;
-                if(sudoku[y-1][x-1]==s[y-1][x-1]) {
-                    system("clear");
-                    sudoku[y-1][x-1]=z;
-                    crtaj();
-                }
-                else{
-                    printf("UPS, wrong one! Try again");
-                    sudoku[y-1][x-1]=0;
-                    greska++;
-                    goto start;
-                }
-         }
-    else {
-        printf("\nPosition is already taken! Please, try again"); 
-        goto start;
-
-    }
-    if(greska==3 || greska==6 || greska>9){
-        nastavi:
-        printf("\nDo You want to see the solution? [Y/N] ");
-        scanf(" %c", &da);
-        if(da=='Y' || da=='Y') {
-                for(i=0; i<9; i++)
-                    for(j=0; j<9; j++)
-                        sudoku[i][j]=s[i][j];
-                crtaj();
-                main();
-            }
-        else if(da=='n' || da=='N') continue;
-        else goto nastavi;
-    }
-    if(greska>11) {
-        luzer();
-        main();
-    }
-    for(i=0; i<9; i++)
-    for(j=0; j<9; j++)
-    if(sudoku[i][j]==0){
-         pobeda++;
-    }
-   if(pobeda==0){ 
-    printf("\nYOU WON!!!!");
-    pitanje:
-    printf("\nDo you want to continue? [Y/N] ");
-    scanf(" %c", &d);
-    if(d=='y' || d=='Y') check();
-    else if(d=='N' || d=='n') break;
-    else {
-        printf("\nPlease enter a valid character!");
-        goto pitanje;
-    }}
-    pobeda=0;
-}}   
+}   
 void casedva(){
 int i,j;
 printf("\nFill sudoku table <<0 as a empty>>");
@@ -210,7 +133,7 @@ void check(){
         break;
     }
 }
-int main(void){
+int main(){
     int options;
     start: printf("\nWhat do you want to do?");
     printf("\n1: Play Sudoku");
@@ -219,6 +142,7 @@ int main(void){
     printf("\n4: Quit");
     printf("\nYour Choice: ");
     scanf("%d", &options);
+    if(options==4) exit(0);
     switch (options)
     {
     case 1:
@@ -231,13 +155,69 @@ int main(void){
         generator();
         crtaj();
         break;
-    case 4: 
-        goto end;
-        break;
     default:
         goto start;
         break;
     }
-    end:
     return 0;
 }
+void igra(){
+    int x, y, z, i, j, greska=0, pobeda=0;
+    char d, da;
+    while(1){
+    start: printf("\nEnter the positions of a number <<x i y>>: "); scanf("%d %d", &x, &y);
+    if(sudoku[y-1][x-1]==0) {
+         printf("\nEnter the number: "); scanf("%d", &z);
+            sudoku[y-1][x-1]=z;
+                if(sudoku[y-1][x-1]==s[y-1][x-1]) {
+                    system("clear");
+                    sudoku[y-1][x-1]=z;
+                    crtaj();
+                }
+                else{
+                    printf("UPS, wrong one! Try again");
+                    sudoku[y-1][x-1]=0;
+                    greska++;
+                    if(greska>5){
+                    system("clear");
+                    printf("\nYou lost!\n");
+                    nastavi:
+                        printf("Do You want to see the solution? [Y/N] ");
+                        scanf(" %c", &da);
+                        if(da=='Y' || da=='y') {
+                            for(i=0; i<9; i++)
+                                for(j=0; j<9; j++)
+                                    sudoku[i][j]=s[i][j];
+                                    crtaj();
+                                    main();
+                        }
+                    else if(da=='n' || da=='N') main();
+                    else goto nastavi;
+                    }
+                goto start;
+                }
+         }
+    else {
+        printf("\nPosition is already taken! Please, try again"); 
+        goto start;
+
+    }
+    
+    for(i=0; i<9; i++)
+    for(j=0; j<9; j++)
+    if(sudoku[i][j]==0){
+         pobeda++;
+    }
+   if(pobeda==0){ 
+    printf("\nYOU WON!!!!");
+    pitanje:
+    printf("\nDo you want to continue? [Y/N] ");
+    scanf(" %c", &d);
+    if(d=='y' || d=='Y') check();
+    else if(d=='N' || d=='n') break;
+    else {
+        printf("\nPlease enter a valid character!");
+        goto pitanje;
+    }}
+    pobeda=0;
+}}
