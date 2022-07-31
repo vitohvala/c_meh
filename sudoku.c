@@ -3,7 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-
+void igra(void);
+void check(void);
 
 int sudoku[9][9];
 int s[10][10];
@@ -76,63 +77,17 @@ void generator(){
     }
 }   
 void casedva(){
-int i,j;
+int i,j, br=0;
 printf("\nFill sudoku table <<0 as a empty>>");
 for(i=0; i<9; i++){
     for(j=0; j<9; j++){
         scanf("%d", &sudoku[i][j]);
         if(resi(i, j)==0) crtaj();
-        else printf("\nNo solution exists!");
+        else br++;
     }}
+    if(br>0) printf("\nno solution exists\n");
 }
-void check(){
-    int k, options;
-    start:
-    printf("\nChoose difficulty:");
-    printf("\n1: Easy");
-    printf("\n2: Medium");
-    printf("\n3: Hard");
-    printf("\n4: Insane");
-    printf("\n5: Go to the main menu");
-    printf("\nYour Choice: ");
-    scanf("%d", &options);
-    switch(options){
-        case 1:
-            generator();
-            for(k=1; k<=30; k++)
-            sudoku[rand()%8][rand()%8]=0;
-            crtaj();
-            igra();
-            break;
-        case 2:
-            generator();
-            for(k=1; k<=40; k++)
-            sudoku[rand()%8][rand()%8]=0;
-            crtaj();
-            igra();
-            break;
-        case 3:
-            generator();
-            for(k=1; k<=60; k++)
-            sudoku[rand()%8][rand()%8]=0;
-            crtaj();
-            igra();
-            break;
-        case 4:
-            generator();
-            for(k=1; k<=71; k++)
-            sudoku[rand()%8][rand()%8]=0;
-            crtaj();
-            igra();
-            break;
-        case 5: 
-        main();
-        break;
-    default: 
-        goto start;
-        break;
-    }
-}
+
 int main(){
     int options;
     start: printf("\nWhat do you want to do?");
@@ -221,3 +176,51 @@ void igra(){
     }}
     pobeda=0;
 }}
+void check(){
+    int k, options;
+    start:
+    printf("\nChoose difficulty:");
+    printf("\n1: Easy");
+    printf("\n2: Medium");
+    printf("\n3: Hard");
+    printf("\n4: Insane");
+    printf("\n5: Go to the main menu");
+    printf("\nYour Choice: ");
+    scanf("%d", &options);
+    switch(options){
+        case 1:
+            generator();
+            for(k=1; k<=30; k++)
+            sudoku[rand()%8][rand()%8]=0;
+            crtaj();
+            igra();
+            break;
+        case 2:
+            generator();
+            for(k=1; k<=40; k++)
+            sudoku[rand()%8][rand()%8]=0;
+            crtaj();
+            igra();
+            break;
+        case 3:
+            generator();
+            for(k=1; k<=60; k++)
+            sudoku[rand()%8][rand()%8]=0;
+            crtaj();
+            igra();
+            break;
+        case 4:
+            generator();
+            for(k=1; k<=71; k++)
+            sudoku[rand()%8][rand()%8]=0;
+            crtaj();
+            igra();
+            break;
+        case 5: 
+        main();
+        break;
+    default: 
+        goto start;
+        break;
+    }
+}
