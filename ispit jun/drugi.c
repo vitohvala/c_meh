@@ -3,14 +3,14 @@
 #define MAX 100
 void unos(int a[MAX][MAX], int n){
     int i,j;
-    printf("\nunesite elemente mnatrice: \n");
+    printf("unesite elemente mnatrice: \n");
     for ( i = 0; i < n; i++)
         for (j=0; j<n; j++)
             scanf("%d", &a[i][j]);
 }
 void ispis (int  a[MAX][MAX], int n){
     int  i, j;
-    printf("\nelementi matrice: \n");
+    printf("elementi matrice: \n");
     for ( i = 0; i < n; i++){
         for (j=0; j<n; j++){
             printf(" %d ", a[i][j]);
@@ -20,7 +20,7 @@ void ispis (int  a[MAX][MAX], int n){
 }
 void zamena(int a[MAX][MAX], int n){
     int i, j, max, min, temp, imax, jmax, i_min, j_min;
-    printf("\nzamenjeni elementi: \n");
+    printf("zamenjeni ");
     for (i = 1; i < n; i++){
         for(j=1; j<n; j++){
             min=max=a[n-j][i];
@@ -40,12 +40,7 @@ void zamena(int a[MAX][MAX], int n){
     temp = a[j_min][i_min];
     a[j_min][i_min]=a[jmax][imax];
     a[jmax][imax]=temp;
-    for (i = 0; i < n; i++){
-        for(j=0; j<n; j++){
-            printf(" %d ", a[i][j]);
-        }
-        printf("\n");
-        }
+    ispis(a, n);
 }
 int main(){
     int n, a[MAX][MAX];

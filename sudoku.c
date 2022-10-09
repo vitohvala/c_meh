@@ -3,11 +3,34 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <unistd.h>
+
 void igra(void);
 void check(void);
 
 int sudoku[9][9];
 int s[10][10];
+int devetke[9];
+int brojevi[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+void brojac() {
+	size_t i, j, k;
+	for(i = 0; i < 9; i++)
+		devetke[i]=9;
+	for(i = 0; i < 9; i++)
+		for(j = 0; j < 9; j++)
+			for(k=0; k<9; k++)
+			if(sudoku[i][j] == brojevi[k])
+				devetke[k]--;
+}
+int nule(){
+	size_t i,j;
+	int brr = 0;
+	for(i = 0; i < 9; i++)
+		for(j = 0; j < 9; j++)
+			if(sudoku[i][j]==0) brr++;
+	return brr;
+
+}
 int provera (int i, int j, int r){
     int red, kolona;
     for(red=0; red<9; red++)
@@ -42,6 +65,10 @@ int resi(int i, int j){
     return 0;
 }
 void crtaj(){
+	brojac();
+	// sat();
+	system("clear");
+	fflush(stdout);
          printf("0 ");
          for (int i=0; i<9; i++){
               printf(" %d ", i+1);
@@ -53,7 +80,7 @@ void crtaj(){
         printf("%d", i+1);
         printf("|");
         for (int j=0; j<9; j++){
-                printf(" %d ", sudoku[i][j]);
+                (sudoku[i][j]==0)? printf(" %d ", sudoku[i][j]): printf("\033[38;5;208m %d \033[0m", sudoku[i][j]);
                 if(j==2 || j==5 || j==8) printf("|");
                 
             }
@@ -62,6 +89,10 @@ void crtaj(){
             }
     printf("y");
     printf("-------------------------------\n");
+    printf("|");
+    for(unsigned int i = 0; i < 9; i++)
+	    printf(" %d :\033[38;5;208m %d \033[38;5;255m|", brojevi[i], devetke[i]);
+
 }
 void generator(){
     srand(time(NULL));
@@ -125,7 +156,6 @@ void igra(){
          printf("\nEnter the number: "); scanf("%d", &z);
             sudoku[y-1][x-1]=z;
                 if(sudoku[y-1][x-1]==s[y-1][x-1]) {
-                    system("clear");
                     sudoku[y-1][x-1]=z;
                     crtaj();
                 }
@@ -176,8 +206,30 @@ void igra(){
     }}
     pobeda=0;
 }}
+void easy(){
+        int random = rand()%9, rendom = rand()%9, brr=nule();
+        sudoku[random][rendom]=0;
+	if(brr<29) easy();
+}
+void medium(){
+        int random = rand()%9, rendom = rand()%9, brr=nule();
+	sudoku[random][rendom]=0;
+	if(brr<39) medium();
+}
+void hard(){
+        int random = rand()%9, rendom = rand()%9, brr=nule();
+	sudoku[random][rendom]=0;
+	if(brr<51) hard();
+
+}
+void insane() {
+        int random = rand()%9, rendom = rand()%9, brr=nule();
+	sudoku[random][rendom]=0;
+	if(brr < 63) insane();
+
+}
 void check(){
-    int k, options;
+    int k, options, random = rand()%8, rendom = rand()%8;
     start:
     printf("\nChoose difficulty:");
     printf("\n1: Easy");
@@ -190,30 +242,26 @@ void check(){
     switch(options){
         case 1:
             generator();
-            for(k=1; k<=30; k++)
-            sudoku[rand()%8][rand()%8]=0;
+	    easy();
             crtaj();
             igra();
             break;
         case 2:
             generator();
-            for(k=1; k<=40; k++)
-            sudoku[rand()%8][rand()%8]=0;
+	    medium();
             crtaj();
             igra();
             break;
         case 3:
             generator();
-            for(k=1; k<=60; k++)
-            sudoku[rand()%8][rand()%8]=0;
-            crtaj();
+	    hard();
+	    crtaj();
             igra();
             break;
         case 4:
             generator();
-            for(k=1; k<=71; k++)
-            sudoku[rand()%8][rand()%8]=0;
-            crtaj();
+	    insane();
+	    crtaj();
             igra();
             break;
         case 5: 
