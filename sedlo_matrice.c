@@ -1,9 +1,5 @@
 /* element matrice se naziva sedlo ako je istovremeno najveci u svojoj koloni i najmanji u svojoj vrsti. formirati matricu c ciji su elementi: 1 ako je a[i][j] sedlo, i 0 ako nije sedlo*/
 #include <stdio.h>
-#include <ctype.h>
-#define PI 3.14
-#include <math.h>
-#include <stdlib.h>
 #define MAX 50
 void unos(int a[MAX][MAX], int n)
 {

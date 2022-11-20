@@ -151,7 +151,7 @@ void igra(){
     int x, y, z, i, j, greska=0, pobeda=0;
     char d, da;
     while(1){
-    start: printf("\nEnter the positions of a number <<x i y>>: "); scanf("%d %d", &x, &y);
+    start: printf("\nEnter the positions of the number <<x i y>>: "); scanf("%d %d", &x, &y);
     if(sudoku[y-1][x-1]==0) {
          printf("\nEnter the number: "); scanf("%d", &z);
             sudoku[y-1][x-1]=z;
@@ -206,28 +206,12 @@ void igra(){
     }}
     pobeda=0;
 }}
-void easy(){
+void tezina(int tez_broj){
         int random = rand()%9, rendom = rand()%9, brr=nule();
         sudoku[random][rendom]=0;
-	if(brr<29) easy();
+	if(brr<tez_broj) tezina(tez_broj);
 }
-void medium(){
-        int random = rand()%9, rendom = rand()%9, brr=nule();
-	sudoku[random][rendom]=0;
-	if(brr<39) medium();
-}
-void hard(){
-        int random = rand()%9, rendom = rand()%9, brr=nule();
-	sudoku[random][rendom]=0;
-	if(brr<51) hard();
 
-}
-void insane() {
-        int random = rand()%9, rendom = rand()%9, brr=nule();
-	sudoku[random][rendom]=0;
-	if(brr < 63) insane();
-
-}
 void check(){
     int k, options, random = rand()%8, rendom = rand()%8;
     start:
@@ -242,25 +226,25 @@ void check(){
     switch(options){
         case 1:
             generator();
-	    easy();
+	    tezina(29);
             crtaj();
             igra();
             break;
         case 2:
             generator();
-	    medium();
+	    tezina(39);
             crtaj();
             igra();
             break;
         case 3:
             generator();
-	    hard();
+	    tezina(53);
 	    crtaj();
             igra();
             break;
         case 4:
             generator();
-	    insane();
+	    tezina(64);
 	    crtaj();
             igra();
             break;
