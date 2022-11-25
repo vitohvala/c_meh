@@ -147,7 +147,20 @@ int main(){
     }
     return 0;
 }
+#include <sys/time.h>
+
+struct timeval t1, t2;
+
+void prikazi_sat(){
+	double elapsedTime;
+	gettimeofday(&t2, NULL);
+	elapsedTime = (t2.tv_sec - t1.tv_sec);
+	float x = elapsedTime / 60.0;
+	float y = (int)elapsedTime % 60;
+	printf("took: %.0fmin & %.0fsec.\n", x, y);
+}
 void igra(){
+    gettimeofday(&t1, NULL);
     int x, y, z, i, j, greska=0, pobeda=0;
     char d, da;
     while(1){
@@ -174,9 +187,14 @@ void igra(){
                                 for(j=0; j<9; j++)
                                     sudoku[i][j]=s[i][j];
                                     crtaj();
+				    puts("");
+				    prikazi_sat();
                                     main();
                         }
-                    else if(da=='n' || da=='N') main();
+                    else if(da=='n' || da=='N') {
+			    prikazi_sat();
+			    main();
+		    }
                     else goto nastavi;
                     }
                 goto start;
@@ -198,8 +216,14 @@ void igra(){
     pitanje:
     printf("\nDo you want to continue? [Y/N] ");
     scanf(" %c", &d);
-    if(d=='y' || d=='Y') check();
-    else if(d=='N' || d=='n') break;
+    if(d=='y' || d=='Y'){
+	    prikazi_sat(); 
+	    check();
+    }
+    else if(d=='N' || d=='n') {
+	    prikazi_sat();
+	    break;
+    }
     else {
         printf("\nPlease enter a valid character!");
         goto pitanje;
