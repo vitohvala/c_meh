@@ -31,7 +31,7 @@ void ispisznaka(char ttt[3][3],char x, int m, int n){
         printf("%d ", i+1);
         printf("| ");
         for(j=0; j<3; j++){
-            if(ttt[i][j]==' ') ttt[i][j]= d;
+            if(ttt[i][j]==' ') ttt[i][j] = d;
             ttt[n-1][m-1]=x;
             printf("%c", ttt[i][j]);
             if (j==0 || j==1 || j==2) printf(" | ");
@@ -91,7 +91,7 @@ return winner;
 
 int main(){
      int m, n, winner=0, i=1;
-    char ttt[3][3], d, o, x;
+    char ttt[3][3], d, o = ' ', x;
     ispis(ttt);
     while(1){
         for(i=1; i<=2; i++){
