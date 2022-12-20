@@ -163,7 +163,8 @@ int maxx(){
 		while(!feof(dat)){
 				fscanf(dat, "%d", &m);
 				if(m > max) max = m;
-		}	
+		}
+		fclose(dat);
 		return max;
 }
 int main(void){
