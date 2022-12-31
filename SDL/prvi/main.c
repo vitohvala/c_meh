@@ -50,16 +50,16 @@ void rend(SDL_Renderer *renderer, Pos *poz){
 
 				SDL_RenderPresent(renderer);
 				
-				if(poz->x == W - 100  && poz->y == H - 100 ) prav = 2;
+				if(poz->x > W - 100  && poz->y > H - 100 ) prav = 2;
 				else if(!poz->x && !poz->y) prav = 1;
 
 				if(prav == 1){
-					poz->x += 10;
-					poz->y += 5;
+					poz->x += 6;
+					poz->y += 3;
 				}
 				else if(prav == 2) {
-						poz->x -= 10;
-						poz->y -= 5;
+						poz->x -= 6;
+						poz->y -= 3;
 				}
 
 			}
