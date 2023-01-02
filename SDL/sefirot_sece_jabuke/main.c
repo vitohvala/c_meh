@@ -3,8 +3,10 @@
 #include <stdio.h>
 #include <time.h>
 
-#define W 800
+#define W 1200
 #define H 600
+#define DL 60
+#define DJ 20
 
 
 typedef struct {
@@ -43,10 +45,10 @@ void cntrlEvent(SDL_Window *window, int *end, Pos *poz){
 		}
 		const uint8_t *state = SDL_GetKeyboardState(NULL);
 
-		if((state[SDL_SCANCODE_A] || state[SDL_SCANCODE_LEFT]) && (poz->x > 0)) poz->x -= 3;
-		if((state[SDL_SCANCODE_D] || state[SDL_SCANCODE_RIGHT]) && (poz->x <= W)) poz->x += 3;
-		if((state[SDL_SCANCODE_W] ||state[SDL_SCANCODE_UP]) && (poz->y > 0)) poz->y -= 3;
-		if((state[SDL_SCANCODE_S] || state[SDL_SCANCODE_DOWN]) && (poz->y <= H)) poz->y += 3;
+		if((state[SDL_SCANCODE_A] || state[SDL_SCANCODE_LEFT]) && (poz->x > 0)) poz->x -= 2;
+		if((state[SDL_SCANCODE_D] || state[SDL_SCANCODE_RIGHT]) && (poz->x + DL < W)) poz->x += 2;
+		if((state[SDL_SCANCODE_W] ||state[SDL_SCANCODE_UP]) && (poz->y > 0)) poz->y -= 2;
+		if((state[SDL_SCANCODE_S] || state[SDL_SCANCODE_DOWN]) && (poz->y + DL < H)) poz->y += 2;
 }
 
 void rend(SDL_Renderer *renderer, Pos *poz){
@@ -57,10 +59,10 @@ void rend(SDL_Renderer *renderer, Pos *poz){
 
 				//SDL_SetRenderDrawColor(renderer,62, 254, 35, 255);
 
-				SDL_Rect jabukarect = { poz->x_vocka, poz->y_vocka, 15, 15 };
+				SDL_Rect jabukarect = { poz->x_vocka, poz->y_vocka, DJ, DJ };
 				SDL_RenderCopy(renderer, poz->jabuka, NULL, &jabukarect);
 			
-				SDL_Rect sefrect = { poz->x, poz->y, 60, 60 };
+				SDL_Rect sefrect = { poz->x, poz->y, DL, DL };
 				SDL_RenderCopy(renderer, poz->lik, NULL, &sefrect);
 
 				SDL_RenderPresent(renderer);
@@ -73,8 +75,10 @@ void rend(SDL_Renderer *renderer, Pos *poz){
 void podesi(Pos *poz){
 
 		srand(time(NULL));
-		poz->x_vocka = rand()%W;
-		poz->y_vocka = rand()%H;
+		int w = W - DJ;
+		int h = H - DJ;
+		poz->x_vocka = rand()%w;
+		poz->y_vocka = rand()%h;
 }
 void provera(SDL_Surface **surf){
 	if(surf == NULL){
@@ -104,8 +108,8 @@ int main(int argc, char *argv[]){
 								  0
 						);
 
-		poz.x = W/2 - 50;
-		poz.y = H/2 - 50;
+		poz.x = W/2 - DL;
+		poz.y = H/2 - DL;
 		podesi(&poz);
 
 		renderer = SDL_CreateRenderer(window, -1 ,SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -129,12 +133,12 @@ int main(int argc, char *argv[]){
 				rend(renderer, &poz);
 //|| poz.x <= poz.x_vocka + 50
 				//desno || right 1 && left || levo 2
-				if(((poz.x + 50 >= poz.x_vocka && poz.x + 50 <= poz.x_vocka + 20) ||
-				    (poz.x <= poz.x_vocka + 20 && poz.x >= poz.x_vocka)) && (poz.y >= poz.y_vocka - 50 && poz.y <= poz.y_vocka + 50))
+				if(((poz.x + DL >= poz.x_vocka && poz.x + DL <= poz.x_vocka + DJ) ||
+				    (poz.x <= poz.x_vocka + DJ && poz.x >= poz.x_vocka)) && (poz.y >= poz.y_vocka - DL && poz.y <= poz.y_vocka + 50))
 						semafor = 1;
 				//gore dole
-				if(((poz.y + 50 >= poz.y_vocka && poz.y + 50 <= poz.y_vocka + 20) ||
-				   (poz.y <= poz.y_vocka + 20 && poz.y >= poz.y_vocka)) && (poz.x >= poz.x_vocka - 50 && poz.x <= poz.x_vocka + 50))
+				if(((poz.y + DL >= poz.y_vocka && poz.y + DL <= poz.y_vocka + DJ) ||
+				   (poz.y <= poz.y_vocka + DJ && poz.y >= poz.y_vocka)) && (poz.x >= poz.x_vocka - DL && poz.x <= poz.x_vocka + 50))
 						semafor = 1;
 
 				if(semafor) podesi(&poz);
