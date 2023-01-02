@@ -5,5 +5,4 @@ CFLAGS = -g -Wall `sdl2-config --cflags --libs` -lSDL2_image
 TARGET = main
 
 all: $(TARGET)
-	$(CC) $(TARGET).c -o $(TARGET) $(CFLAGS) 
-
+	$(CC) main.c -o $(TARGET)  $(CFLAGS) 

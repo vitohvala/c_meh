@@ -16,7 +16,6 @@ typedef struct {
 		SDL_Texture *lik;
 }Pos;
 
-short prav;
 
 void cntrlEvent(SDL_Window *window, int *end, Pos *poz){
 		
