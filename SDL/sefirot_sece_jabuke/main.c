@@ -5,7 +5,7 @@
 
 #define W 1200
 #define H 600
-#define DL 60
+#define DL 80
 #define DJ 20
 
 
@@ -13,11 +13,11 @@ typedef struct {
 		int x, y;
 		SDL_Texture *jabuka;
 		int x_vocka, y_vocka;
-		SDL_Texture *lik;
+		SDL_Texture *lik[2];
 }Pos;
 
 
-void cntrlEvent(SDL_Window *window, int *end, Pos *poz){
+void cntrlEvent(SDL_Window *window, int *end, Pos *poz, uint8_t *pravac){
 		
 		SDL_Event event;
 
@@ -44,13 +44,13 @@ void cntrlEvent(SDL_Window *window, int *end, Pos *poz){
 		}
 		const uint8_t *state = SDL_GetKeyboardState(NULL);
 
-		if((state[SDL_SCANCODE_A] || state[SDL_SCANCODE_LEFT]) && (poz->x > 0)) poz->x -= 2;
-		if((state[SDL_SCANCODE_D] || state[SDL_SCANCODE_RIGHT]) && (poz->x + DL < W)) poz->x += 2;
+		if((state[SDL_SCANCODE_A] || state[SDL_SCANCODE_LEFT]) && (poz->x > 0)) {poz->x -= 2; *pravac = 2;}
+		if((state[SDL_SCANCODE_D] || state[SDL_SCANCODE_RIGHT]) && (poz->x + DL < W)) {poz->x += 2; *pravac = 1;}
 		if((state[SDL_SCANCODE_W] ||state[SDL_SCANCODE_UP]) && (poz->y > 0)) poz->y -= 2;
 		if((state[SDL_SCANCODE_S] || state[SDL_SCANCODE_DOWN]) && (poz->y + DL < H)) poz->y += 2;
 }
 
-void rend(SDL_Renderer *renderer, Pos *poz){
+void rend(SDL_Renderer *renderer, Pos *poz, uint8_t pravac){
 
 				SDL_SetRenderDrawColor(renderer,  243, 135, 21 , 255);
 		
@@ -61,8 +61,14 @@ void rend(SDL_Renderer *renderer, Pos *poz){
 				SDL_Rect jabukarect = { poz->x_vocka, poz->y_vocka, DJ, DJ };
 				SDL_RenderCopy(renderer, poz->jabuka, NULL, &jabukarect);
 			
-				SDL_Rect sefrect = { poz->x, poz->y, DL, DL };
-				SDL_RenderCopy(renderer, poz->lik, NULL, &sefrect);
+				if(pravac == 0 || pravac == 1){
+					SDL_Rect sefrect = { poz->x, poz->y, DL, DL };
+					SDL_RenderCopy(renderer, poz->lik[0], NULL, &sefrect);
+				}
+				else{
+					SDL_Rect sefrect = { poz->x, poz->y, DL, DL };
+					SDL_RenderCopy(renderer, poz->lik[1], NULL, &sefrect);
+				}
 
 				SDL_RenderPresent(renderer);
 				
@@ -91,7 +97,7 @@ int main(int argc, char *argv[]){
 		
 		Pos poz;
 		int end = 1;
-
+		uint8_t pravac = 0;
 		
 		SDL_Window *window;
 		SDL_Renderer *renderer;
@@ -120,16 +126,20 @@ int main(int argc, char *argv[]){
 
 		surf = IMG_Load("slika/sefko.png");
 		provera(&surf);
-		poz.lik = SDL_CreateTextureFromSurface(renderer, surf);
+		poz.lik[0] = SDL_CreateTextureFromSurface(renderer, surf);
 		SDL_FreeSurface(surf);
 
+		surf = IMG_Load("slika/sefkolev.png");
+		provera(&surf);
+		poz.lik[1] = SDL_CreateTextureFromSurface(renderer, surf);
+		SDL_FreeSurface(surf);
 		uint8_t semafor = 0;
 
 		while(end){
 		
-				cntrlEvent(window, &end, &poz);
+				cntrlEvent(window, &end, &poz, &pravac);
 				
-				rend(renderer, &poz);
+				rend(renderer, &poz, pravac);
 //|| poz.x <= poz.x_vocka + 50
 				//desno || right 1 && left || levo 2
 				if(((poz.x + DL >= poz.x_vocka && poz.x + DL <= poz.x_vocka + DJ) ||
