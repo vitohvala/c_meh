@@ -29,6 +29,9 @@ int pobednik(char board[3][3]){
         else if (board[0][i] == board[1][i] && board[1][i] == board[2][i] && board[0][i] != ' ')
             winner = (board[0][i] == 'X') ? 1 : 2;
     }
+    if((board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] != ' ') ||
+      (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[0][2] != ' '))
+        winner = (board[1][1] == 'X') ? 1 : 2;
 
     for (i = 0; i < 3; i++){
         for (j = 0; j < 3; j++) {
