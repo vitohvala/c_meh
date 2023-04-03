@@ -1,7 +1,7 @@
-#include "SDL2/SDL.h"
+#include <SDL2/SDL.h>
 
-#define W 1500
-#define H 800
+#define WIDTH 1500
+#define HEIGHT 800
 
 
 typedef struct {
@@ -50,7 +50,7 @@ void rend(SDL_Renderer *renderer, Pos *poz){
 
     SDL_RenderPresent(renderer);
 
-    if(poz->x > W - 100  && poz->y > H - 100 ) prav = 2;
+    if(poz->x > WIDTH - 100  && poz->y > HEIGHT - 100 ) prav = 2;
     else if(!poz->x && !poz->y) prav = 1;
 
     if(prav == 1){
@@ -63,9 +63,14 @@ void rend(SDL_Renderer *renderer, Pos *poz){
     }
 
 }
+#ifdef __WIN32__
+#include <windows.h>
 
-int main(int argc, char *argv[]){
-
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+#else
+int main(int argc, char *argv[])
+#endif
+{
     Pos poz;
     int end = 1;
 
@@ -77,8 +82,8 @@ int main(int argc, char *argv[]){
     window = SDL_CreateWindow("Window",
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
-            W,
-            H,
+            WIDTH,
+            HEIGHT,
             0
             );
 

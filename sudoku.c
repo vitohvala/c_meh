@@ -4,7 +4,17 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
-#include <sys/time.h>
+#include <sys/time.h> 
+
+#ifdef _WIN32
+
+#define CLEAR "@cls"
+
+#else
+
+#define CLEAR "clear"
+
+#endif
 
 void igra(void);
 void check(void);
@@ -68,7 +78,7 @@ int resi(int i, int j){
 }
 void crtaj(){
     brojac();
-    system("clear");
+    system(CLEAR);
     printf("0 ");
     for (int i=0; i<9; i++){
         printf(" %d ", i+1);

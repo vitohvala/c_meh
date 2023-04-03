@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <termios.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -7,7 +6,18 @@
 #include <time.h>
 #include <assert.h>
 #include <errno.h>
+#include <stdbool.h>
+
+#define ROW 50
+#define COL 25
+
+#ifdef __WIN32__
+#include <conio.h>
+#define CLEAR "@cls"
+#else
+#define CLEAR "clear"
 #include <sys/select.h>
+#include <termios.h>
 
 #define CMIN 1
 
@@ -25,7 +35,7 @@ int kbhit(void){
     int cnt = 0;
     int error;
     static struct termios Otty, Ntty;
-
+,
     tcgetattr(0, &Otty);
     Ntty = Otty;
 
@@ -49,6 +59,25 @@ int kbhit(void){
     return (error == 0 ? cnt : -1 );
 }
 
+static int getch(void){
+    int c = 0;
+    struct termios org_opts, new_opts;
+    int res = 0;
+
+    res = tcgetattr(STDIN_FILENO, &org_opts);
+    assert(res == 0);
+
+    memcpy(&new_opts, &org_opts, sizeof(new_opts));
+    new_opts.c_lflag &= ~(ICANON | ECHO | ECHOE | ECHOK | ECHONL | ECHOPRT | ECHOKE | ICRNL);
+    tcsetattr(STDIN_FILENO, TCSANOW, &new_opts);
+    c = getchar();
+
+    res = tcsetattr(STDIN_FILENO, TCSANOW, &org_opts);
+    assert(res == 0);
+
+    return c;
+}
+#endif
 int msleep(long tms){
     struct timespec ts;
     int ret;
@@ -69,31 +98,9 @@ int msleep(long tms){
     return ret;
 }
 
-#define ROW 50
-#define COL 25
-
-static int getch(void){
-    int c = 0;
-    struct termios org_opts, new_opts;
-    int res = 0;
-
-    res = tcgetattr(STDIN_FILENO, &org_opts);
-    assert(res == 0);
-
-    memcpy(&new_opts, &org_opts, sizeof(new_opts));
-    new_opts.c_lflag &= ~(ICANON | ECHO | ECHOE | ECHOK | ECHONL | ECHOPRT | ECHOKE | ICRNL);
-    tcsetattr(STDIN_FILENO, TCSANOW, &new_opts);
-    c = getchar();
-
-    res = tcsetattr(STDIN_FILENO, TCSANOW, &org_opts);
-    assert(res == 0);
-
-    return c;
-}
-
 void crtaj(int x_voc, int y_voc, int score, int tailX[], int tailY[], int k, int x, int y){
     uint16_t i, j;
-    system("clear");
+    system(CLEAR);
     for(i = 0; i < COL + 1; i++){
         for(j = 0; j < ROW + 1; j++){
             if(i == 0) printf("_");
@@ -116,8 +123,6 @@ void crtaj(int x_voc, int y_voc, int score, int tailX[], int tailY[], int k, int
     }
     printf("score: [%d]\n", score);
 }
-
-#include <stdbool.h>
 
 bool provera(int x, int y, int tx[], int ty[], int k){
     int i, br = 0;

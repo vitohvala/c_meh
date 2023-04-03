@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include <time.h>
 
-#define W 1200
-#define H 600
+#define WIDTH 1200
+#define HEIGHT 600
 #define DL 80
 #define DJ 20
 
@@ -45,9 +45,9 @@ void cntrlEvent(SDL_Window *window, int *end, Pos *poz, uint8_t *pravac){
     const uint8_t *state = SDL_GetKeyboardState(NULL);
 
     if((state[SDL_SCANCODE_A] || state[SDL_SCANCODE_LEFT]) && (poz->x > 0)) {poz->x -= 2; *pravac = 2;}
-    if((state[SDL_SCANCODE_D] || state[SDL_SCANCODE_RIGHT]) && (poz->x + DL < W)) {poz->x += 2; *pravac = 1;}
+    if((state[SDL_SCANCODE_D] || state[SDL_SCANCODE_RIGHT]) && (poz->x + DL < WIDTH)) {poz->x += 2; *pravac = 1;}
     if((state[SDL_SCANCODE_W] ||state[SDL_SCANCODE_UP]) && (poz->y > 0)) poz->y -= 2;
-    if((state[SDL_SCANCODE_S] || state[SDL_SCANCODE_DOWN]) && (poz->y + DL < H)) poz->y += 2;
+    if((state[SDL_SCANCODE_S] || state[SDL_SCANCODE_DOWN]) && (poz->y + DL < HEIGHT)) poz->y += 2;
 }
 
 void rend(SDL_Renderer *renderer, Pos *poz, uint8_t pravac){
@@ -80,8 +80,8 @@ void rend(SDL_Renderer *renderer, Pos *poz, uint8_t pravac){
 void podesi(Pos *poz){
 
     srand(time(NULL));
-    int w = W - DJ;
-    int h = H - DJ;
+    int w = WIDTH - DJ;
+    int h = HEIGHT - DJ;
     poz->x_vocka = rand()%w;
     poz->y_vocka = rand()%h;
 }
@@ -93,7 +93,14 @@ void provera(SDL_Surface **surf){
     }
 }
 
-int main(int argc, char *argv[]){
+#ifdef __WIN32__
+#include <windows.h>
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+#else
+int main(int argc, char *argv[])
+#endif
+{
 
     Pos poz;
     int end = 1;
@@ -108,13 +115,13 @@ int main(int argc, char *argv[]){
     window = SDL_CreateWindow("Window",
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
-            W,
-            H,
+            WIDTH,
+            HEIGHT,
             0
             );
 
-    poz.x = W/2 - DL;
-    poz.y = H/2 - DL;
+    poz.x = WIDTH/2 - DL;
+    poz.y = HEIGHT/2 - DL;
     podesi(&poz);
 
     renderer = SDL_CreateRenderer(window, -1 ,SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
