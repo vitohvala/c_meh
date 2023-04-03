@@ -35,7 +35,7 @@ int kbhit(void){
     int cnt = 0;
     int error;
     static struct termios Otty, Ntty;
-,
+
     tcgetattr(0, &Otty);
     Ntty = Otty;
 
