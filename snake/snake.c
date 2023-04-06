@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <unistd.h>
-#include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
 #include <time.h>
@@ -12,72 +11,17 @@
 #define COL 25
 
 #ifdef __WIN32__
+
 #include <conio.h>
 #define CLEAR "@cls"
+
 #else
+
 #define CLEAR "clear"
-#include <sys/select.h>
-#include <termios.h>
+#include "tastatura.h"
 
-#define CMIN 1
-
-#ifdef CTIME
-#undef CTIME
 #endif
 
-#define CTIME 1
-
-#include <sys/ioctl.h>
-#include <sys/time.h>
-#include <sys/types.h>
-//ukradeno
-int kbhit(void){
-    int cnt = 0;
-    int error;
-    static struct termios Otty, Ntty;
-
-    tcgetattr(0, &Otty);
-    Ntty = Otty;
-
-    Ntty.c_iflag = 0; /* input mode */
-    Ntty.c_oflag = 0; /* output mode */
-    Ntty.c_lflag &= ~ICANON; /* raw mode */
-    Ntty.c_cc[VMIN] = CMIN; /* minimum time to wait */
-    Ntty.c_cc[VTIME] = CTIME; /* minimum characters to wait for */
-
-    if (0 == (error = tcsetattr(0, TCSANOW, &Ntty))) {
-        struct timeval tv;
-        error += ioctl(0, FIONREAD, &cnt);
-        error += tcsetattr(0, TCSANOW, &Otty);
-
-        /* throw in a miniscule time delay */
-        tv.tv_sec = 0;
-        tv.tv_usec = 100;
-        select(1, NULL, NULL, NULL, &tv);
-    }
-
-    return (error == 0 ? cnt : -1 );
-}
-
-static int getch(void){
-    int c = 0;
-    struct termios org_opts, new_opts;
-    int res = 0;
-
-    res = tcgetattr(STDIN_FILENO, &org_opts);
-    assert(res == 0);
-
-    memcpy(&new_opts, &org_opts, sizeof(new_opts));
-    new_opts.c_lflag &= ~(ICANON | ECHO | ECHOE | ECHOK | ECHONL | ECHOPRT | ECHOKE | ICRNL);
-    tcsetattr(STDIN_FILENO, TCSANOW, &new_opts);
-    c = getchar();
-
-    res = tcsetattr(STDIN_FILENO, TCSANOW, &org_opts);
-    assert(res == 0);
-
-    return c;
-}
-#endif
 int msleep(long tms){
     struct timespec ts;
     int ret;
@@ -136,9 +80,10 @@ void voce(int *poz, int *poz2, int tailX[], int tailY[], int k, int x, int y){
     srand(time(NULL));
     int dd = COL - 2;
     int yy = ROW - 2;
+    int x_poz, y_poz;
 opet:
-    int x_poz = rand() % dd + 1;
-    int y_poz = rand() % yy + 1;
+     x_poz = rand() % dd + 1;
+     y_poz = rand() % yy + 1;
     if(provera(x_poz, y_poz, tailX, tailY, k) && (x != x_poz && y != y_poz)) {
         *poz = x_poz;
         *poz2 = y_poz;
@@ -157,7 +102,7 @@ void unesi_score(int score){
 }
 int maxx(){
     FILE *dat;
-    int m, i = 0, max;
+    int m, max;
     dat = fopen("skor.dat", "r");
     if(dat == NULL){
         printf("Greska!\n");
@@ -176,8 +121,8 @@ int main(void){
 
     int tailX[10000], tailY[10000];
 
-    printf("\e[?25l");
-    int poz = 0, x_voc, y_voc, end  = 1,  k = 6, prevpos,
+    printf("\033[?25l");
+    int poz = 0, x_voc, y_voc, end  = 1,  k = 6,
         score = 0, c = 0, brzina = 70;
 
     int x, y;
@@ -257,7 +202,7 @@ int main(void){
         printf("Maksimalan score: %d\n", max);
         printf("Trenutni score: %d\n", score);
     }
-    printf("\e[?25h");
+    printf("\033[?25h");
     printf("GAME OVER\n");
 
     return 0;
