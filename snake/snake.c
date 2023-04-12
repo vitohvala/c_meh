@@ -6,6 +6,7 @@
 #include <assert.h>
 #include <errno.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 #define ROW 50
 #define COL 25
@@ -18,7 +19,7 @@
 #else
 
 #define CLEAR "clear"
-#include "tastatura.h"
+#include "libtastatura.h"
 
 #endif
 

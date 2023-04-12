@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <stdlib.h>
+#include <stdlib.h>
 #include <errno.h>
 #define CMIN 1
 
@@ -17,6 +19,8 @@
 #include <sys/ioctl.h>
 #include <sys/time.h>
 #include <sys/types.h>
+
+#include "libtastatura.h"
 //ukradeno
 int kbhit(void){
     int cnt = 0;
@@ -46,7 +50,7 @@ int kbhit(void){
     return (error == 0 ? cnt : -1 );
 }
 
-static int getch(void){
+int getch(void){
     int c = 0;
     struct termios org_opts, new_opts;
     int res = 0;
