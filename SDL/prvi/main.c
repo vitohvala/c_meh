@@ -1,6 +1,6 @@
 #include <SDL2/SDL.h>
 
-#define WIDTH 1500
+#define WIDTH 800
 #define HEIGHT 800
 
 
