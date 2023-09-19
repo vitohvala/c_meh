@@ -35,13 +35,13 @@ void clear(void){
     printf("\x1b[H");
 }
 
-void reset_terminal(){
+void reset_terminal(void){
     fflush(stdout);
     tcsetattr(STDIN_FILENO, TCSANOW, &old_termios);
     printf("\x1b[?25h");
 }
 
-void terminal_config(){
+void terminal_config(void){
     int res = 0;
     printf("\x1b[?25l");
     res = tcgetattr(STDIN_FILENO, &old_termios);
@@ -114,7 +114,7 @@ void unesi_score(int score){
     fprintf(dat, "%d\n", score);
     fclose(dat);
 }
-int maxx(){
+int maxx(void){
     FILE *dat;
     int m, max;
     dat = fopen("skor.dat", "r");
