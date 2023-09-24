@@ -30,6 +30,8 @@ typedef struct {
 
 static struct termios old_termios;
 
+int usleep(unsigned int usec);
+
 void clear(void){
     printf("\x1b[2J");
     printf("\x1b[H");
@@ -116,7 +118,7 @@ void unesi_score(int score){
 }
 int maxx(void){
     FILE *dat;
-    int m, max;
+    int m, max = 0;
     dat = fopen("skor.dat", "r");
     if(dat == NULL){
         printf("Greska!\n");
@@ -227,8 +229,9 @@ int main(void){
         collision_det(&end, &snake, &y_fruit, &x_fruit);
         usleep(150000); 
     }
-    int max = maxx();
-    if(snake.score >= max) printf("New high score: %d\r\n", snake.score);
+    int max = 0;
+    max = maxx();
+    if(snake.score > max) printf("New high score: %d\r\n", snake.score);
     else {
         printf("Your score: %d\r\n", snake.score);
         printf("Max score: %d\r\n", max);
