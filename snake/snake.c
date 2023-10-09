@@ -155,10 +155,10 @@ void move_snake(SNAKE *snake, int strana){
             snake->y[0]++;
             break;
     }
-    if(strana == DOWN && snake->y[0] >= ROW) snake->y[0] = 1;
-    if(strana == UP && snake->y[0] < 0) snake->y[0] = ROW - 2;
-    if(strana == LEFT && snake->x[0] < 0) snake->x[0] = COL - 2;
-    if(strana == RIGHT && snake->x[0] >= COL) snake->x[0] = 1;
+    if(snake->y[0] > ROW - 2) snake->y[0] = 1;
+    if(snake->y[0] <= 0) snake->y[0] = ROW - 2;
+    if(snake->x[0] <= 0) snake->x[0] = COL - 2;
+    if(snake->x[0] > COL - 2) snake->x[0] = 1;
 }
 
 void input_control(int *strana){
