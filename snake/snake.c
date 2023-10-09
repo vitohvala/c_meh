@@ -108,9 +108,9 @@ void put_fruit(SNAKE *snake, int *x_fruit, int *y_fruit){
 }
 
 void unesi_score(int score){
-    FILE *dat;
-    if((dat = fopen("skor.dat", "a")) == NULL){
-        printf("Greska!\n");
+    FILE *dat = fopen("skor.txt", "a");
+    if(dat == NULL){
+        perror("fopen");
         exit(1);
     }
     fprintf(dat, "%d\n", score);
@@ -119,10 +119,9 @@ void unesi_score(int score){
 int maxx(void){
     FILE *dat;
     int m, max = 0;
-    dat = fopen("skor.dat", "r");
+    dat = fopen("skor.txt", "r");
     if(dat == NULL){
-        printf("Greska!\n");
-        exit(1);
+        return 0;
     }
 
     max = 0;
